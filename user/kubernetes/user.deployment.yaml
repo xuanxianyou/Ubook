@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deploy
+  labels:
+    name: user-deploy
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: user
+  template:
+    metadata:
+      labels:
+        name: user
+    spec:
+      containers:
+        - name: user
+          image: user
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Never
+          env:
+            - name: consulHost
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: serviceAddr
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        - name: mysql
+          image: usermysql
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+          imagePullPolicy: Never
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          imagePullPolicy: Never

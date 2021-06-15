@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2587456 */
+  src: url('iconfont.woff2?t=1622628839096') format('woff2'),
+       url('iconfont.woff?t=1622628839096') format('woff'),
+       url('iconfont.ttf?t=1622628839096') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-thirdphone:before {
+  content: "\e61a";
+}
+
+.el-icon-thirduser:before {
+  content: "\e609";
+}
+
+.el-icon-thirdpassword:before {
+  content: "\e606";
+}
+

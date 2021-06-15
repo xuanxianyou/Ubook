@@ -1,30 +1,24 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: DaemonSet
 metadata:
-  name: consul-server
+  name: consul-client
   labels:
-    name: consul-server
+    name: consul-client
 spec:
-  serviceName: consul-server
   selector:
     matchLabels:
-      name: consul-server
-  replicas: 3
+      name: consul-client
   template:
     metadata:
       labels:
-        name: consul-server
+        name: consul-client
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: consul
           image: consul:latest
           imagePullPolicy: IfNotPresent
           args:
             - "agent"
-            - "-server"
-            - "-bootstrap-expect=3"
-            - "-ui"
             - "-data-dir=/consul/data"
             - "-bind=0.0.0.0"
             - "-client=0.0.0.0"
@@ -43,18 +37,40 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - consul reload
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - consul leave
+          volumeMounts:
+            - name: consul-data-dir
+              mountPath: /consul/data
           ports:
             - containerPort: 8500
+              hostPort: 8500
               name: http
             - containerPort: 8400
               name: rpc
             - containerPort: 8443
-              name: https-port
+              name: https
             - containerPort: 8301
               name: serf-lan
             - containerPort: 8302
               name: serf-wan
             - containerPort: 8600
-              name: consul-dns
+              name: consul
             - containerPort: 8300
               name: server
+      volumes:
+        - name: consul-data-dir
+          hostPath:
+            path: /Users/xuan/desktop/consul/data
+            type: DirectoryOrCreate

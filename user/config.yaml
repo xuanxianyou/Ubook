@@ -15,8 +15,8 @@ mysql:
 
 
 sms:
-  app-id: hw_10287
-  secret-key: 7a1e0ca788627e5e3473a2f387c147ba
+  app-id: YourAppID
+  secret-key: YourSecretKey
 
 redis:
   type: redis

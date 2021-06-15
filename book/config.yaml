@@ -1,0 +1,22 @@
+server:
+  port: 8000
+  read-timeout: 60
+  write-timeout: 60
+  secret-key: "SecretKey"
+
+mysql:
+  type: mysql
+  user: ubook
+  password: ubook
+  host: 127.0.0.1
+  port: 3306
+  name: ubook
+  table-prefix: go_
+
+
+mongo:
+  type: mongodb
+  host: 127.0.0.1
+  port: 27017
+  database: Book
+  collection: books
